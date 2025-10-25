@@ -1,13 +1,15 @@
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, CardMedia, CardContent, Typography, Avatar, Box } from '@mui/material';
+import { Card, CardMedia, CardContent, Typography, Avatar, Box, Button } from '@mui/material';
 import type { Recipe } from '../../../types';
 
 interface Props {
   recipe: Recipe;
+  isAuthor?: boolean;
+  onDelete?: () => void;
 }
 
-const RecipeItem: FC<Props> = ({ recipe }) => {
+const RecipeItem: FC<Props> = ({ recipe, isAuthor, onDelete }) => {
   const user = typeof recipe.user === 'string' ? null : recipe.user;
 
   return (
@@ -62,44 +64,53 @@ const RecipeItem: FC<Props> = ({ recipe }) => {
           sx={{
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'space-between',
             p: 1,
             gap: 1,
             borderTop: '1px solid #ebebeb',
             backgroundColor: '#fafafa',
           }}
         >
-          <Avatar
-            src={
-              user.avatar
-                ? user.avatar.startsWith('http')
-                  ? user.avatar
-                  : `http://localhost:8000/${user.avatar}`
-                : undefined
-            }
-            alt={user.displayName}
-            sx={{ width: 32, height: 32 }}
-          />
-          <Link
-            to={`/user/${user._id}`}
-            style={{
-              textDecoration: 'none',
-              color: '#333',
-              fontFamily: '"Inter", "Roboto", "Helvetica Neue", Arial, sans-serif',
-              fontWeight: 400,
-              fontSize: '0.9rem',
-              transition: 'color 0.2s ease',
-            }}
-          >
-            <Typography
-              variant="body2"
-              sx={{
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Avatar
+              src={
+                user.avatar
+                  ? user.avatar.startsWith('http')
+                    ? user.avatar
+                    : `http://localhost:8000/${user.avatar}`
+                  : undefined
+              }
+              alt={user.displayName}
+              sx={{ width: 32, height: 32 }}
+            />
+            <Link
+              to={`/user/${user._id}`}
+              style={{
+                textDecoration: 'none',
                 color: '#333',
-                '&:hover': { color: '#63b363', fontWeight: 600 },
+                fontFamily: '"Inter", "Roboto", "Helvetica Neue", Arial, sans-serif',
+                fontWeight: 400,
+                fontSize: '0.9rem',
+                transition: 'color 0.2s ease',
               }}
             >
-              by {user.displayName}
-            </Typography>
-          </Link>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: '#333',
+                  '&:hover': { color: '#63b363', fontWeight: 600 },
+                }}
+              >
+                by {user.displayName}
+              </Typography>
+            </Link>
+          </Box>
+
+          {isAuthor && onDelete && (
+            <Button variant="outlined" color="error" size="small" onClick={onDelete}>
+              Delete
+            </Button>
+          )}
         </Box>
       )}
     </Card>

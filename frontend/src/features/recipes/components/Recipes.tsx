@@ -1,5 +1,5 @@
 import { type FC, useEffect } from 'react';
-import { Box, CircularProgress, Typography} from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks.ts';
 import { fetchRecipes } from '../recipesThunk.ts';
 import RecipeItem from './RecipeItem.tsx';

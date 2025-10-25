@@ -1,81 +1,80 @@
 import { useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Button, CircularProgress, Grid, Typography, Box } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
+import { Link, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { selectAuthorRecipes, selectAuthorRecipesLoading } from '../recipesSlice';
+import {
+  selectAuthorRecipes,
+  selectAuthorRecipesLoading,
+  selectDeleteRecipeLoading,
+} from '../recipesSlice';
 import { selectUser } from '../../users/usersSlice';
-import RecipeItem from './RecipeItem';
-import { fetchRecipesByUser } from '../recipesThunk.ts';
+import RecipeList from './RecipeList';
+import { deleteRecipe, fetchRecipesByUser } from '../recipesThunk';
 
 const UserRecipes = () => {
-    const { id } = useParams();
-    const dispatch = useAppDispatch();
+  const { id } = useParams();
+  const dispatch = useAppDispatch();
 
-    const recipes = useAppSelector(selectAuthorRecipes);
-    const loading = useAppSelector(selectAuthorRecipesLoading);
-    const user = useAppSelector(selectUser);
+  const recipes = useAppSelector(selectAuthorRecipes);
+  const loading = useAppSelector(selectAuthorRecipesLoading);
+  const deleting = useAppSelector(selectDeleteRecipeLoading);
+  const user = useAppSelector(selectUser);
 
-    useEffect(() => {
-        if (id) {
-            void dispatch(fetchRecipesByUser(id));
-        }
-    }, [dispatch, id]);
+  const isAuthor = user?._id === id;
 
-    const isAuthor = user && user._id === id;
+  useEffect(() => {
+    if (id) void dispatch(fetchRecipesByUser(id));
+  }, [dispatch, id]);
 
-    return (
-        <Box sx={{ mt: 3, px: 2 }}>
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    mb: 3,
-                }}
-            >
-                <Typography variant="h5" fontWeight={600} color="#333">
-                    {isAuthor ? 'My recipes' : "Author's recipes"}
-                </Typography>
+  const deleteRecipeHandler = async (recipeId: string) => {
+    if (!window.confirm('Are you sure you want to delete this recipe?')) return;
 
-                {isAuthor && (
-                    <Button
-                        variant="contained"
-                        component={Link}
-                        to="/recipes/new"
-                        sx={{
-                            borderRadius: '20px',
-                            backgroundColor: '#63b363',
-                            '&:hover': { backgroundColor: '#57a257' },
-                        }}
-                    >
-                        Add Recipe
-                    </Button>
-                )}
-            </Box>
+    const result = await dispatch(deleteRecipe(recipeId));
+    if (result.meta.requestStatus === 'fulfilled' && id) {
+      void dispatch(fetchRecipesByUser(id));
+    }
+  };
 
-            {loading ? (
-                <CircularProgress sx={{ display: 'block', mx: 'auto', mt: 5 }} />
-            ) : (
-                <Grid container spacing={2}>
-                    {recipes.map((recipe) => (
-                        <Box
-                            key={recipe._id}
-                            sx={{
-                                width: {
-                                    xs: '100%',
-                                    sm: 'calc(50% - 16px)',
-                                    md: 'calc(33.333% - 16px)',
-                                    lg: 'calc(25% - 16px)',
-                                },
-                            }}
-                        >
-                            <RecipeItem recipe={recipe} />
-                        </Box>
-                    ))}
-                </Grid>
-            )}
-        </Box>
-    );
+  return (
+    <Box sx={{ mt: 3, px: 2 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 3,
+        }}
+      >
+        <Typography variant="h5" fontWeight={600} color="#333">
+          {isAuthor
+            ? 'My recipes'
+            : `Recipes by ${recipes[0] && typeof recipes[0].user !== 'string' ? recipes[0].user.displayName : ''}`}
+        </Typography>
+
+        {isAuthor && (
+          <Button
+            variant="contained"
+            component={Link}
+            to="/recipes/new"
+            sx={{
+              borderRadius: '20px',
+              backgroundColor: '#63b363',
+              '&:hover': { backgroundColor: '#57a257' },
+            }}
+          >
+            Add Recipe
+          </Button>
+        )}
+      </Box>
+
+      <RecipeList
+        recipes={recipes}
+        loading={loading || deleting}
+        isAuthor={isAuthor}
+        onDelete={deleteRecipeHandler}
+      />
+    </Box>
+  );
 };
 
 export default UserRecipes;

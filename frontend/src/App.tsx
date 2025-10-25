@@ -4,7 +4,9 @@ import AppToolbar from './components/UI/AppToolbar/AppToolbar.tsx';
 import Register from './features/users/Register.tsx';
 import Login from './features/users/Login.tsx';
 import Recipes from './features/recipes/components/Recipes.tsx';
-import UserRecipes from "./features/recipes/components/UserRecipes.tsx";
+import UserRecipes from './features/recipes/components/UserRecipes.tsx';
+import NewRecipe from './features/recipes/components/NewRecipe.tsx';
+import MyRecipes from './features/recipes/components/MyRecipes.tsx';
 
 const App = () => {
   return (
@@ -17,7 +19,9 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<Recipes />} />
-            <Route path="/user/:id" element={<UserRecipes />} />
+          <Route path="/recipes/new" element={<NewRecipe />} />
+          <Route path="/mine" element={<MyRecipes />} />
+          <Route path="/user/:id" element={<UserRecipes />} />
           <Route path="*" element={<Typography>Not found</Typography>} />
         </Routes>
       </Container>
