@@ -20,3 +20,10 @@ export interface RecipeFields {
     recipe: string;
     image: string;
 }
+
+export interface CommentFields {
+    user: mongoose.Types.ObjectId;
+    recipe: mongoose.Types.ObjectId;
+    text: string;
+    createdAt?: Date;
+}

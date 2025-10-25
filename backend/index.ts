@@ -4,6 +4,7 @@ import usersRouter from "./routers/users";
 import config from "./config";
 import mongoose from "mongoose";
 import recipesRouter from "./routers/recipes";
+import commentsRouter from "./routers/comments";
 
 const app = express();
 const port = 8000;
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.static('public'));
 
 app.use('/recipes', recipesRouter);
+app.use('/comments', commentsRouter);
 app.use('/users', usersRouter);
 
 const run = async () => {
