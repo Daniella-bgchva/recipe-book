@@ -4,13 +4,14 @@ import { selectCreateRecipeLoading } from '../recipesSlice.ts';
 import { createRecipe } from '../recipesThunk.ts';
 import { Box, Typography } from '@mui/material';
 import RecipeForm from './RecipeForm.tsx';
+import type {RecipeMutation} from "../../../types";
 
 const NewRecipe = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const loading = useAppSelector(selectCreateRecipeLoading);
 
-  const onFormSubmit = async (recipeData: any) => {
+  const onFormSubmit = async (recipeData: RecipeMutation) => {
     await dispatch(createRecipe(recipeData)).unwrap();
     navigate('/');
   };
