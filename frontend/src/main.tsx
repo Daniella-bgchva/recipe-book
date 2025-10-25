@@ -13,16 +13,16 @@ import { GOOGLE_ClIENT_ID } from './constants.ts';
 addInterceptors(store);
 
 createRoot(document.getElementById('root')!).render(
-    <GoogleOAuthProvider clientId={GOOGLE_ClIENT_ID}>
-        <Provider store={store}>
-            <PersistGate persistor={persistor}>
-                <BrowserRouter>
-                    <ThemeProvider theme={theme}>
-                        <CssBaseline />
-                        <App />
-                    </ThemeProvider>
-                </BrowserRouter>
-            </PersistGate>
-        </Provider>
-    </GoogleOAuthProvider>,
+  <GoogleOAuthProvider clientId={GOOGLE_ClIENT_ID}>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <BrowserRouter>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <App />
+          </ThemeProvider>
+        </BrowserRouter>
+      </PersistGate>
+    </Provider>
+  </GoogleOAuthProvider>,
 );
