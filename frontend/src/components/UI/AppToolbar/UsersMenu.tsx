@@ -4,6 +4,7 @@ import { Button, Menu, MenuItem, Box, Avatar} from '@mui/material';
 import { useAppDispatch } from '../../../app/hooks.ts';
 import { logout } from '../../../features/users/usersThunk.ts';
 import { Link } from 'react-router-dom';
+import {API_URL} from "../../../constants.ts";
 
 interface Props {
     user: User;
@@ -28,19 +29,30 @@ const UserMenu: FC<Props> = ({ user }) => {
 
     return (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Button
-                onClick={handleClick}
-                color="inherit"
-                startIcon={<Avatar src={user.avatar} alt={user.username} />}
-                sx={{
-                    textTransform: 'none',
-                    fontWeight: 500,
-                    color: '#333',
-                    '&:hover': { color: '#63b363' },
-                }}
-            >
-                Hi, {user.displayName}!
-            </Button>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Avatar
+                    src={
+                        user.avatar
+                            ? user.avatar.startsWith('http')
+                                ? user.avatar
+                                : `${API_URL}/${user.avatar}`
+                            : undefined
+                    }
+                    alt={user.displayName}
+                    sx={{ width: 36, height: 36, border: '2px solid #d7ccc8' }}
+                />
+                <Button
+                    onClick={handleClick}
+                    sx={{
+                        textTransform: 'none',
+                        fontWeight: 500,
+                        color: '#333',
+                        '&:hover': { color: '#63b363' },
+                    }}
+                >
+                    Welcome, {user.displayName}!
+                </Button>
+            </Box>
             <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
                 <MenuItem component={Link} to={`/mine`} onClick={handleClose}>
                     My Recipes
