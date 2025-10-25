@@ -8,13 +8,19 @@ import Comment from '../models/Comment';
 
 const recipesRouter = express.Router();
 
-recipesRouter.get('/', async (_req, res) => {
-  try {
-    const recipes = await Recipe.find().populate('user', 'displayName avatar');
-    res.send(recipes);
-  } catch (e) {
-    res.sendStatus(500);
-  }
+recipesRouter.get('/', async (req, res) => {
+    try {
+        const filter: { user?: string } = {};
+        if (typeof req.query.user === 'string') {
+            filter.user = req.query.user;
+        }
+
+        const recipes = await Recipe.find(filter).populate('user', 'displayName avatar');
+        res.send(recipes);
+    } catch (e) {
+        console.error('Error fetching recipes:', e);
+        res.sendStatus(500);
+    }
 });
 
 recipesRouter.get('/mine', auth, async (req, res) => {

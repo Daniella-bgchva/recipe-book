@@ -33,17 +33,18 @@ export const fetchMyRecipes = createAsyncThunk<Recipe[], void, { rejectValue: Gl
 );
 
 export const fetchRecipesByUser = createAsyncThunk<Recipe[], string, { rejectValue: GlobalError }>(
-  'recipes/fetchByUser',
-  async (userId, { rejectWithValue }) => {
-    try {
-      const { data } = await axiosApi.get<Recipe[]>('/recipes', { params: { user: userId } });
-      return data;
-    } catch (err) {
-      if (isAxiosError(err) && err.response)
-        return rejectWithValue(err.response.data as GlobalError);
-      throw err;
-    }
-  },
+    'recipes/fetchByUser',
+    async (userId, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosApi.get<Recipe[]>('/recipes', { params: { user: userId } });
+            return data;
+        } catch (err) {
+            if (isAxiosError(err) && err.response) {
+                return rejectWithValue(err.response.data as GlobalError);
+            }
+            throw err;
+        }
+    },
 );
 
 export const fetchOneRecipe = createAsyncThunk<Recipe, string, { rejectValue: GlobalError }>(

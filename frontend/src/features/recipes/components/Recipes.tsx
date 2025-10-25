@@ -1,17 +1,14 @@
 import { type FC, useEffect } from 'react';
-import { Box, CircularProgress, Typography, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Box, CircularProgress, Typography} from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks.ts';
 import { fetchRecipes } from '../recipesThunk.ts';
 import RecipeItem from './RecipeItem.tsx';
-import { selectUser } from '../../users/usersSlice.ts';
 import { selectRecipes, selectRecipesLoading } from '../recipesSlice.ts';
 
 const Recipes: FC = () => {
   const dispatch = useAppDispatch();
   const recipes = useAppSelector(selectRecipes);
   const loading = useAppSelector(selectRecipesLoading);
-  const user = useAppSelector(selectUser);
 
   useEffect(() => {
     dispatch(fetchRecipes());
@@ -21,16 +18,6 @@ const Recipes: FC = () => {
     <Box sx={{ p: 2 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Typography variant="h4">Recipes</Typography>
-        {user && (
-          <Button
-            component={Link}
-            to="/recipes/new"
-            variant="contained"
-            sx={{ backgroundColor: '#63b363', '&:hover': { backgroundColor: '#a0e36c' } }}
-          >
-            Add Recipe
-          </Button>
-        )}
       </Box>
 
       {loading ? (

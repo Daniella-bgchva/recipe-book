@@ -4,6 +4,7 @@ import AppToolbar from './components/UI/AppToolbar/AppToolbar.tsx';
 import Register from './features/users/Register.tsx';
 import Login from './features/users/Login.tsx';
 import Recipes from './features/recipes/components/Recipes.tsx';
+import UserRecipes from "./features/recipes/components/UserRecipes.tsx";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<Recipes />} />
+            <Route path="/user/:id" element={<UserRecipes />} />
           <Route path="*" element={<Typography>Not found</Typography>} />
         </Routes>
       </Container>
