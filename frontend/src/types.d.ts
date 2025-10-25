@@ -51,3 +51,14 @@ export interface RecipeMutation {
   ingredients: string[];
   image?: File;
 }
+
+export interface Comment {
+  _id: string;
+  text: string;
+  user: {
+    _id: string;
+    displayName: string;
+  };
+  recipeId: string;
+  createdAt: string;
+}
